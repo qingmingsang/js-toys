@@ -1,9 +1,9 @@
-var QM = (function() {
+var QM = (function () {
 	/*
 	 * QM()
 	 * (string Selector,['click'etc],[function],['on'|'off'])
 	 */
-	var $ = function(Selector, Action, Func, Bind) {
+	var $ = function (Selector, Action, Func, Bind) {
 		if (Action) {
 			var i = 0;
 			var picker = document.querySelectorAll(Selector);
@@ -24,11 +24,12 @@ var QM = (function() {
 	}
 	return $;
 })();
-(function($) {
+
+(function ($) {
 	/*
 	 * QM.errorDetect()
+	 * (any)
 	 */
-
 	function stringDetect(str) {
 		var errorData = ['null', 'false', 'error', '0', 'undefined', 'NaN', '[]', '{}', ''];
 		for (var i = 0; i < errorData.length; i++) {
@@ -46,7 +47,7 @@ var QM = (function() {
 			return obj;
 		}
 	}
-	$.errorDetect = function(data) {
+	$.errorDetect = function (data) {
 		switch (typeof data) {
 			case 'string':
 				return stringDetect(data);
@@ -58,3 +59,95 @@ var QM = (function() {
 	}
 	return $;
 })(QM);
+
+(function ($) {
+	/*
+	 * QM.scrollToBottom()
+	 * (function)
+	 */
+	function scrollToBottom(func) {
+		var cHeight, sHeight, sTop;
+		if (client.browser.firefox) {
+			window.addEventListener('DOMMouseScroll', function (event) {
+				if (event.detail) {
+					if (document.compatMode == "BackCompat") {
+						cHeight = document.body.clientHeight;
+						sHeight = document.body.scrollHeight;
+					} else {
+						cHeight = document.documentElement.clientHeight;
+						sHeight = document.documentElement.scrollHeight;
+					}
+					sTop = document.documentElement.scrollTop == 0 ? document.body.scrollTop : document.documentElement.scrollTop;
+					sTop = Math.ceil(sTop);
+					if (sTop + cHeight == sHeight) {
+						func();
+					}
+				}
+			})
+		} else {
+			window.addEventListener('wheel', function (event) {
+				if (event.wheelDelta < 0) {
+					if (document.compatMode == "BackCompat") {
+						cHeight = document.body.clientHeight;
+						sHeight = document.body.scrollHeight;
+					} else {
+						cHeight = document.documentElement.clientHeight;
+						sHeight = document.documentElement.scrollHeight;
+					}
+					sTop = document.documentElement.scrollTop == 0 ? document.body.scrollTop : document.documentElement.scrollTop;
+					sTop = Math.ceil(sTop);
+					if (sTop + cHeight == sHeight) {
+						func();
+					}
+				}
+			})
+		}
+	}
+	$.scrollToBottom = scrollToBottom;
+	return $;
+})(QM);
+
+(function ($) {
+	/*
+	 * QM.loading()
+	 * ()
+	 * dom:
+	 * 	<div class=" loadingMain ">
+	 *  	<div class="loadingBar ">
+     *            0
+     *  	</div>
+     * 	</div>
+	 */
+	var count = 0;
+	$.loading = function () {
+		var img = [].slice.call(document.getElementsByTagName("img"));
+		var link = [].slice.call(document.getElementsByTagName("link"));
+		//var script = [].slice.call(document.getElementsByTagName("script"));
+		//var audio = [].slice.call(document.getElementsByTagName("audio"));
+		var sources = img.concat(link);
+		var l = sources.length;
+		for (var i = 0; i < l; i++) {
+			detection(sources[i], l);
+		}
+	}
+
+	function detection(v, l) {
+		v.onload = function () {
+			++count;
+			var percent = Math.floor(count / l * 100) + '%';
+			$(".loadingBar").style.width = percent;
+			$(".loadingBar").innerHTML = percent;
+		}
+		v.onerror = function () {
+			++count;
+			var percent = Math.floor(count / l * 100) + '%';
+			$(".loadingBar").style.width = percent;
+			$(".loadingBar").innerHTML = percent;
+		}
+		if (count == l) {
+			$(".loadingMain").style.display = 'none';
+		}
+	}
+	return $;
+})(QM);
+
