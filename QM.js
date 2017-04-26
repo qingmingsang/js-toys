@@ -151,3 +151,44 @@ var QM = (function () {
 	return $;
 })(QM);
 
+(function ($) {
+	function touchLeft(Selector, func) {
+		var startX;
+		var startY;
+		var touchMove = function (e) {
+			var distanceX = startX - e.changedTouches[0].clientX;
+			var distanceY = startY - e.changedTouches[0].clientY;
+			if ((Math.abs(distanceX) > Math.abs(distanceY)) && distanceX > 10) {
+				$(Selector, 'touchmove', touchMove, 'off');
+				func();
+			}
+		}
+		var touchStart = function (e) {
+			startX = e.changedTouches[0].clientX;
+			startY = e.changedTouches[0].clientY;
+			$(Selector, 'touchmove', touchMove)
+		}
+		$(Selector, 'touchstart', touchStart);
+	}
+	function touchTop(Selector, func) {
+		var startX;
+		var startY;
+		var touchMove = function (e) {
+			var distanceX = startX - e.changedTouches[0].clientX;
+			var distanceY = startY - e.changedTouches[0].clientY;
+			if ((Math.abs(distanceY) > Math.abs(distanceX)) && distanceY > 10) {
+				$(Selector, 'touchmove', touchMove, 'off');
+				func();
+			}
+		}
+		var touchStart = function (e) {
+			startX = e.changedTouches[0].clientX;
+			startY = e.changedTouches[0].clientY;
+			$(Selector, 'touchmove', touchMove)
+		}
+		$(Selector, 'touchstart', touchStart);
+	}
+	$.touchTop = touchTop;
+	$.touchLeft = touchLeft;
+	return $;
+})(QM);
