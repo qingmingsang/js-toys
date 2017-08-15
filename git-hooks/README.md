@@ -1,7 +1,7 @@
 # 利用git hooks维护代码规范
 最近接触到[prettier](https://github.com/prettier/prettier)，了解过后觉得适用性和功能性都比原本eslint、stylelint的方案更为合适，所以决定改为采用prettier作为hooks脚本的核心。
 
-[完整示例代码](http://git.dev.sh.ctripcorp.com/ccfu/git-hooks/tree/master)
+[完整示例代码](https://github.com/qingmingsang/QM.js/tree/master/git-hooks)
 
 [必须安装node.js才能进行下面的工作](https://nodejs.org/en/)
 
@@ -62,7 +62,7 @@ eslint filename.js --fix
 
 ~~使用stylelint检查css代码~~
 
-考虑目前的css代码情况，以及[stylelint文档](https://github.com/stylelint/stylelint/blob/master/docs/user-guide/cli.md)的稀烂，该工具可以考虑只在后续项目中使用。
+考虑到[stylelint文档](https://github.com/stylelint/stylelint/blob/master/docs/user-guide/cli.md)的稀烂，该工具应该在生产项目中谨慎使用。
 
 实现流程：
 
@@ -145,7 +145,7 @@ Working directory为工作目录;
 
 name  `prettier`
 
-Program  `D:\Users\ccfu\AppData\Roaming\npm\prettier.cmd`
+Program  `D:\workshop\Roaming\npm\prettier.cmd`
 
 Parameters  `--write --tab-width 4 --use-tabs true $FilePathRelativeToProjectRoot$`
 
@@ -161,16 +161,16 @@ git hooks在`.git/hooks`文件夹中，有`pre-push pre-rebase`等几种，本�
 
 通过编写`pre-commit`脚本，可以实现在提交前执行一些工具，比如说eslint，如果不符合规范，将无法提交代码。
 
-这里我写了该[pre-commit脚本](http://git.dev.sh.ctripcorp.com/ccfu/git-hooks/blob/master/pre-commit.sh)，其本质是在commit前使用了prettier进行代码格式化。
+这里我写了该[pre-commit脚本](https://github.com/qingmingsang/QM.js/blob/master/git-hooks/pre-commit.sh)，其本质是在commit前使用了prettier进行代码格式化。
 
 这样就在本地实现了利用git hooks配合工具维护代码规范的目的。
 
 ### hooks团队共享
 `.git`目录是不会被clone下来的。
 
-我的思路是编写一个[js脚本](http://git.dev.sh.ctripcorp.com/ccfu/git-hooks/blob/master/pre-commit.js)，执行该脚本将同步的[sh脚本](http://git.dev.sh.ctripcorp.com/ccfu/git-hooks/blob/master/pre-commit.sh)写入`.git/hooks/pre-commit.sh`中来达到同步更新的目的。
+我的思路是编写一个[js脚本](https://github.com/qingmingsang/QM.js/blob/master/git-hooks/pre-commit.js)，执行该脚本将同步的[sh脚本](https://github.com/qingmingsang/QM.js/blob/master/git-hooks/pre-commit.sh)写入`.git/hooks/pre-commit.sh`中来达到同步更新的目的。
 
-现在你可以将[示例](http://git.dev.sh.ctripcorp.com/ccfu/git-hooks/tree/master)fork下来，执行`npm run prect`生成pre-commit hooks。
+现在你可以将[示例](https://github.com/qingmingsang/QM.js/tree/master/git-hooks)fork下来，执行`npm run prect`生成pre-commit hooks。
 
 修改一下js/css代码，然后commit，之后你会发现一些可能细微的错误和格式混乱的问题被自动修正了。
 
