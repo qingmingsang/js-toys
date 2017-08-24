@@ -1,5 +1,5 @@
 # 图片压缩工具
-[项目地址]()
+[项目地址](https://github.com/qingmingsang/QM.js/tree/master/compress-image)
 
 
 1. 自动将文件名的中文转为拼音并提取首字母，自动命名。
