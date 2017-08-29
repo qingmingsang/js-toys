@@ -2,6 +2,7 @@ var QM = (function () {
 	/*
 	 * QM()
 	 * (string Selector,['click'etc],[function],['on'|'off'])
+	 * 这里可以用事件代理的方式优化
 	 */
 	var $ = function (Selector, Action, Func, Bind) {
 		if (Action) {
