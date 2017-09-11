@@ -1,5 +1,5 @@
 # 本地svg转iconfont工具
-[项目地址](http://git.dev.sh.ctripcorp.com/ccfu/svg2icon/tree/master)
+[项目地址](https://github.com/qingmingsang/QM.js/tree/master/svg-2-icon)
 
 ## 使用方式
 将svg文件放入`src/svg`目录中。
