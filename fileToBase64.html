@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <input type="file" value="选择文件" id="file" />
+    <textarea id="txt" style="width: 1000px; height: 600px;"></textarea>
+    <script>
+        let fileInput = document.getElementById('file');
+        let txt = document.getElementById('txt');
+        let fr = new FileReader();
+        fileInput.addEventListener('change', (e) => {
+            fr.readAsDataURL(e.target.files[0]);
+            fr.onload = () => {
+                txt.innerHTML = fr.result;
+            }
+        })
+    </script>
+</body>
+
+</html>
