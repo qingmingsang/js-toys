@@ -1,2 +1,2 @@
-# QM.js
-my toys
+# my-toys
+my js plugins and tools 
