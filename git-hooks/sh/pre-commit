@@ -1,0 +1,29 @@
+#!/usr/bin/env node
+
+const execSync = require('child_process').execSync;
+const path = require('path');
+const hooksPath = path.resolve('..', 'git-hooks')
+const eslintPath = path.resolve(hooksPath, 'node_modules', 'eslint', 'bin', 'eslint.js');
+const configPath = path.join(hooksPath, '.eslintrc');
+const ignorePath = path.join(hooksPath, '.eslintignore');
+
+let files;
+try {
+    files = execSync(`git diff --cached --name-only`);
+    let str = files + '';
+    if (str) {
+        let arr = str.split('\n');
+        let reportPath;
+        arr.forEach((v) => {
+            reportPath = path.basename(v, '.js')
+            if (/\.js$/.test(v)) {
+                execSync(`node ${eslintPath} -c ${configPath} --ignore-path ${ignorePath} -f html ${v} --fix > ${reportPath}_eslint_report.html`);
+            }
+        });
+        execSync(`git add .`);
+        process.exit(0);
+    }
+} catch (err) {
+    throw (err);
+    process.exit(1);
+}

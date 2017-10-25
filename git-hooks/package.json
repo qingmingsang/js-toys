@@ -4,14 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prect": "node pre-commit.js"
+    "prect": "node pre-commit.js",
+    "start": "node ./sh/create-hooks"
   },
   "keywords": [],
   "author": "qm",
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^4.3.0",
-    "prettier": "^1.5.3",
-    "stylelint": "^8.0.0"
+    "eslint": "^4.6.1",
+    "eslint-plugin-prettier": "^2.2.0",
+    "prettier": "^1.6.1",
+    "stylelint": "^8.1.1"
   }
 }

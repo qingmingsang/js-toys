@@ -1,8 +1,8 @@
 var a = "aa";
-var b = a;
+var b = a;  
 console.log(b);
 function test() {
-	var str = "hello world";
+    var str = "hello world";
 }
 test(1, 0, 0, 0, 1, 0, 0, 0, 1);
 // prettier-ignore
@@ -11,3 +11,4 @@ test(
     0, 1, 0,
     0, 0, 1
 )
+var c = "abcdefg";

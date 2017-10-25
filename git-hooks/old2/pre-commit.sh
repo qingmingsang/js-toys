@@ -8,15 +8,14 @@ try {
     if (str) {
         let arr = str.split('\n');
         arr.forEach((v) => {
-            if (/\.jsx*$/.test(v)) {
-                execSync(`eslint -f html ${v} --fix > eslint_report.html`);
-            } else if (/\.css$/.test(v)) {
-                execSync(`stylelint -f string ${v} --fix > stylelint_report.txt`);
+            if (/\.(jsx*|css)$/.test(v)) {
+                execSync(`prettier --no-config --print-width 120 --tab-width 4 --write ${v}`);
             }
         });
+        execSync(`git add .`);
         process.exit(0);
     }
 } catch (err) {
-    throw(err);
+    throw (err);
     process.exit(1);
 }

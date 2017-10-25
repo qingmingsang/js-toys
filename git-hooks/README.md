@@ -1,7 +1,6 @@
 # 利用git hooks维护代码规范
-最近接触到[prettier](https://github.com/prettier/prettier)，了解过后觉得适用性和功能性都比原本eslint、stylelint的方案更为合适，所以决定改为采用prettier作为hooks脚本的核心。
 
-[完整示例代码](https://github.com/qingmingsang/QM.js/tree/master/git-hooks)
+[完整示例代码](https://github.com/qingmingsang/js-toys/tree/master/git-hooks)
 
 [必须安装node.js才能进行下面的工作](https://nodejs.org/en/)
 
@@ -13,13 +12,13 @@
 
 [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)
 
-~~使用eslint检查js代码~~
+### 使用eslint检查js代码
 
 根据制定的规范，利用eslint维护相应的代码规范。
 
 实现流程：
 
-~~1.安装~~
+1.安装
 
 ```
 npm i eslint -g 
@@ -27,7 +26,7 @@ npm i eslint -D
 //eslint-plugin-react -D//如果要支持react检查需要安装这个
 ```
 
-~~2.配置~~
+2.配置
 
 `eslint --init`会生成一个.eslintrc文件，里面写的是[验证规则](http://cn.eslint.org/docs/rules/)。
 
@@ -38,7 +37,7 @@ npm i eslint -D
 "error"或2- 将规则转为错误（触发时退出代码为1）
 ```
 
-~~3.执行~~
+3.执行
 
 执行该命令会在命令行显示不符合规则的代码。
 ```
@@ -54,31 +53,73 @@ eslint -f html filename.js > eslint_report.html
 ```
 eslint filename.js --fix
 ```
+需要注意这里的fix是生成一个重写的新文件。
+
+可以在代码里加入[特定的注释](https://cn.eslint.org/docs/user-guide/configuring#disabling-rules-with-inline-comments)使检测忽视某段代码
+如：
+```
+/* eslint-disable */
+
+alert('foo');
+
+/* eslint-enable */
+```
+
+4.IDE集成
+
+在[文档](http://eslint.cn/docs/user-guide/integrations)里介绍了将eslint集成到几种IDE的方式。
+
+#### vscode
+先安装`Eslint`extension，然后`文件 | 首选项 | 设置`，找到ESlint进行配置使用即可。
+这里是我的配置：
+```
+    "eslint.options": {
+        "configFile": "D:/MyWorkShop/git-hooks/.eslintrc"
+    },
+    "eslint.run": "onSave",
+    "eslint.nodePath": "D:/MyWorkShop/git-hooks/node_modules",
+    "eslint.autoFixOnSave": true
+```
+效果是保存的时候会自动进行eslint校验和fix。
+
+#### webstorm
+webstorm已经默认集成了Eslint plugin，进入`File | Settings | Languages & Frameworks | Javascript | Code Quality Tools`点击`Enable`进行配置。
+
+这里是我的配置
+
+Node interpreter  `C:\Program Files\nodejs\node.exe`
+
+Eslint package  `~\MyWorkShop\git-hooks\node_modules\eslint`
+
+Configuration file  `D:\MyWorkShop\git-hooks\.eslintrc`
+
+配置好后你可以在你的代码里看到根据`eslintrc`配置而产生的不同代码提示，并且右键能看到`Fix Eslint Problems`，通过它能使用`eslint --fix`命令。如果觉得右键选择麻烦，也可以在设置里的keymap里设置使用相应工具的快捷键。
+
 
 
 ## css
 ### 可参考的css代码规范
 [Airbnb CSS / Sass 指南](https://github.com/Zhangjd/css-style-guide/)
 
-~~使用stylelint检查css代码~~
+### 使用stylelint检查css代码
 
-考虑到[stylelint文档](https://github.com/stylelint/stylelint/blob/master/docs/user-guide/cli.md)的稀烂，该工具应该在生产项目中谨慎使用。
+考虑目前的css代码情况，以及[stylelint文档](https://github.com/stylelint/stylelint/blob/master/docs/user-guide/cli.md)的稀烂，该工具可以考虑只在后续项目中使用。
 
 实现流程：
 
-~~1.安装~~
+1.安装
 
 ```
 npm i stylelint -g
 ```
 
-~~2.配置~~
+2.配置
 
 stylelint与eslint有一点相似，也需要一个`.***rc`文件填写配置。但是没发现类似`stylelint --init`这样的命令。
 手动创建一个.stylelintrc文件后,在里面填写[规则](https://stylelint.io/user-guide/rules/)。
 开启规则方式大多以`true`与数字为主。
 
-~~3.执行~~
+3.执行
 
 执行该命令会在命令行显示不符合规则的代码。
 ```
@@ -121,7 +162,10 @@ prettier [opts] [filename ...]
 
 prettier --tab-width 4 --use-tabs true --write folder/*
 ```
-这里可能需要注意的是，prettier的write功能，其实是重写文件，如果重写可能出现的bug，他有一定的检验机制提醒，但是具体规则文档里没写，还需要实践摸索。
+这里可能需要注意的是，prettier的write功能，其实是重写文件，如果重写可能出现bug，他有一定的检验机制提醒，但是具体规则文档里没写，还需要实践摸索。
+
+`// prettier-ignore`的下一行代码段可以不被prettier检测重写。
+
 
 4.IDE集成
 
@@ -145,13 +189,13 @@ Working directory为工作目录;
 
 name  `prettier`
 
-Program  `D:\workshop\Roaming\npm\prettier.cmd`
+Program  `D:\AppData\Roaming\npm\prettier.cmd`
 
 Parameters  `--write --tab-width 4 --use-tabs true $FilePathRelativeToProjectRoot$`
 
 Working directory  `$ProjectFileDir$`
 
-配置好后你就能在IDE里右键选择相应External Tools使用了，如果觉得麻烦，也可以在设置里的keymap设置使用相应工具的快捷键，将能取代IDE原本的代码格式化，并且功能更强大。
+配置好后你就能在IDE里右键选择相应External Tools使用了，如果觉得麻烦，同样可以在设置里的keymap设置使用相应工具的快捷键。
 
 
 ## git hooks
@@ -159,18 +203,18 @@ Working directory  `$ProjectFileDir$`
 
 git hooks在`.git/hooks`文件夹中，有`pre-push pre-rebase`等几种，本质上只是生命周期的不同，这里只讨论`pre-commit`。
 
-通过编写`pre-commit`脚本，可以实现在提交前执行一些工具，比如说eslint，如果不符合规范，将无法提交代码。
+通过编写`pre-commit`脚本，可以实现在提交前执行一些工具，比如说prettier，如果不符合规范，将无法提交代码。
 
-这里我写了该[pre-commit脚本](https://github.com/qingmingsang/QM.js/blob/master/git-hooks/pre-commit.sh)，其本质是在commit前使用了prettier进行代码格式化。
+这里我写了该[pre-commit脚本](https://github.com/qingmingsang/js-toys/tree/master/git-hooks/pre-commit.sh)，其本质是在commit前使用了prettier进行代码格式化。
 
 这样就在本地实现了利用git hooks配合工具维护代码规范的目的。
 
 ### hooks团队共享
 `.git`目录是不会被clone下来的。
 
-我的思路是编写一个[js脚本](https://github.com/qingmingsang/QM.js/blob/master/git-hooks/pre-commit.js)，执行该脚本将同步的[sh脚本](https://github.com/qingmingsang/QM.js/blob/master/git-hooks/pre-commit.sh)写入`.git/hooks/pre-commit.sh`中来达到同步更新的目的。
+我的思路是编写一个js脚本，执行该脚本将同步的sh脚本写入`.git/hooks/pre-commit.sh`中来达到同步更新的目的。
 
-现在你可以将[示例](https://github.com/qingmingsang/QM.js/tree/master/git-hooks)fork下来，执行`npm run prect`生成pre-commit hooks。
+现在你可以将示例fork下来，执行`npm run prect`生成pre-commit hooks。
 
 修改一下js/css代码，然后commit，之后你会发现一些可能细微的错误和格式混乱的问题被自动修正了。
 
