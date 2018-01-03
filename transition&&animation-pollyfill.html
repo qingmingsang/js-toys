@@ -1,93 +1,95 @@
 <!DOCTYPE html>
 <html>
 
-<head>
+  <head>
     <meta charset="UTF-8">
     <title></title>
     <style>
-        .a {
-            width: 300px;
-            height: 300px;
-            background: lightblue;
-            transition: background 3s;
-        }
+      .a {
+        width: 300px;
+        height: 300px;
+        background: lightblue;
+        transition: background 3s;
+      }
 
-        @keyframes xx {
-            0% {
-                transform: translatey(100px);
-            }
-            100% {
-                transform: translatey(0);
-            }
+      @keyframes xx {
+        0% {
+          transform: translatey(100px);
         }
+        100% {
+          transform: translatey(0);
+        }
+      }
 
-        .cb {
-            background: lightcoral;
-        }
+      .cb {
+        background: lightcoral;
+      }
 
-        .ca {
-            animation: xx 3s;
-        }
+      .ca {
+        animation: xx 3s;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class='a'></div>
     <div class='a b'></div>
     <script>
-        let a = document.querySelector('.a');
-        let b = document.querySelector('.b');
+      let a = document.querySelector('.a');
+      let b = document.querySelector('.b');
 
-        function detectTransitionEvent() {
-            let el = document.createElement('fakeelement');
-            let transitions = {
-                'transition': 'transitionend',
-                'WebkitTransition': 'webkitTransitionEnd',
-                'MozTransition': 'mozTransitionEnd',
-                'OTransition': 'oTransitionEnd',
-                'msTransition': 'MSTransitionEnd'
-            }
-            for (let v in transitions) {
-                if (el.style[v] !== undefined) {
-                    return transitions[v];
-                }
-            }
+      function detectTransitionEvent() {
+        let el = document.createElement('fakeelement');
+        //必须与css前缀配合使用，否则会出问题
+        let transitions = {
+          'transition': 'transitionend',
+          'WebkitTransition': 'webkitTransitionEnd',
+          'MozTransition': 'mozTransitionEnd',
+          'OTransition': 'oTransitionEnd',
+          'msTransition': 'MSTransitionEnd'
         }
-        let transitionEvent = detectTransitionEvent();
-        transitionEvent && a.addEventListener(transitionEvent, () => {
-            console.log(transitionEvent);
+        for (let v in transitions) {
+          if (el.style[v] !== undefined) {
+            return transitions[v];
+          }
+        }
+      }
+      let transitionEvent = detectTransitionEvent();
+      transitionEvent && a.addEventListener(transitionEvent, () => {
+        console.log(transitionEvent);
+      });
+      setTimeout(() => {
+        a.classList.add('cb');
+      }, 1000);
+
+      function detectAnimationEvent() {
+        let el = document.createElement('fakeelement');
+        //必须与css前缀配合使用，否则会出问题
+        let animations = {
+          'animation': 'animationend',
+          'WebkitAnimation': 'webkitAnimationEnd',
+          'MozAnimation': 'mozAnimationEnd',
+          'OAnimation': 'oAnimationEnd',
+          'msAnimation': 'MSAnimationEnd'
+        }
+        for (let v in animations) {
+          if (el.style[v] !== undefined) {
+            return animations[v];
+          }
+        }
+      }
+      let animationEvent = detectAnimationEvent();
+      if (animationEvent) {
+        b.addEventListener(animationEvent, () => {
+          console.log(animationEvent);
         });
+      } else {
         setTimeout(() => {
-            a.classList.add('cb');
-        }, 1000);
-
-        function detectAnimationEvent() {
-            let el = document.createElement('fakeelement');
-            let animations = {
-                'animation': 'animationend',
-                'WebkitAnimation': 'webkitAnimationEnd',
-                'MozAnimation': 'mozAnimationEnd',
-                'OAnimation': 'oAnimationEnd',
-                'msAnimation': 'MSAnimationEnd'
-            }
-            for (let v in animations) {
-                if (el.style[v] !== undefined) {
-                    return animations[v];
-                }
-            }
-        }
-        let animationEvent = detectAnimationEvent();
-        if (animationEvent) {
-            b.addEventListener(animationEvent, () => {
-                console.log(animationEvent);
-            });
-        } else {
-            setTimeout(() => {
-                console.log('setTimeout');
-            }, 3000);
-        }
-        b.classList.add('ca');
+          console.log('setTimeout');
+        }, 3000);
+      }
+      b.classList.add('ca');
     </script>
-</body>
+  </body>
 
 </html>
