@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>hello</title>
+  <meta name="description" content="">
+  <meta name="valwords" content="">
+  <!-- <link rel="shortcut icon" href="favicon.ico"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- 默认使用webkit内核 -->
+  <meta name="renderer" content="webkit">
+  <!-- 兼容模式 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <link href="" rel="stylesheet">
+</head>
+
+<body>
+  <div id='a'></div>
+  <script>
+    function compile(template) {
+      const evalExpr = /<%=(.+?)%>/g;
+      const expr = /<%([\s\S]+?)%>/g;
+
+      template = template
+        .replace(evalExpr, '`); \n  echo( $1 ); \n  echo(`')
+        .replace(expr, '`); \n $1 \n  echo(`');
+
+      template = 'echo(`' + template + '`);';
+      let script =
+        `(function parse(data){
+        let output = "";
+    
+        function echo(html){
+          output += html;
+        }
+    
+        ${ template}
+    
+        return output;
+      })`;
+      return eval(script);
+    }
+    let template = `
+      <ul>
+        <% for(let i=0; i < data.supplies.length; i++) { %>
+          <li><%= data.supplies[i] %></li>
+        <% } %>
+      </ul>
+    `;
+    let div = document.getElementById('a');
+    let parse = compile(template);
+    div.innerHTML = parse({ supplies: ["broom", "mop", "cleaner"] });
+    //   <ul>
+    //     <li>broom</li>
+    //     <li>mop</li>
+    //     <li>cleaner</li>
+    //   </ul>
+  </script>
+</body>
+
+</html>
